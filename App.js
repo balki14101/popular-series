@@ -20,6 +20,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 // See, now we got that folder inside node_modules
 // node_modules/@react-navigation/stack
 // minor change
+// one more change
 const Stack = createStackNavigator();
 
 const App = () => {
