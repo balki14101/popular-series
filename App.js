@@ -19,7 +19,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 // see the typo in the import here??
 // See, now we got that folder inside node_modules
 // node_modules/@react-navigation/stack
-
+// minor change
 const Stack = createStackNavigator();
 
 const App = () => {
