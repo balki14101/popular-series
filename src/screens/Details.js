@@ -1,14 +1,63 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import ViewMoreText from 'react-native-view-more-text';
 
 const BASE_IMAGE_URL = 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
 const BACKDROP_URL = 'https://www.themoviedb.org/t/p/original';
 
+const EpisodeItem = props => {
+  console.log(props);
+  const episode = props.epi;
+  // const number = props.episode_number
+  return (
+    <View style={{}}>
+      <View style={{flexDirection: 'row'}}>
+        <Image
+          source={{uri: BASE_IMAGE_URL + episode.still_path}}
+          resizeMode="contain"
+          style={{
+            width: 150,
+            height: 150,
+            marginBottom: 5,
+            marginLeft: 5,
+            borderRadius: 5,
+          }}
+        />
+        <View style={{marginLeft: 10}}>
+          <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 15}}>
+            {episode.name}
+          </Text>
+          <Text style={{color: '#fff'}}>{episode.episode_number}</Text>
+
+          <Text style={{color: '#fff'}}>{episode.air_date}</Text>
+        </View>
+        <View>
+          <Feather name="download" size={30} color="#fff" />
+        </View>
+      </View>
+      <Text style={{color: '#fff'}}>{episode.overview}</Text>
+    </View>
+  );
+};
+
 class Details extends React.Component {
   state = {
     seriesData: null,
+    episodeData: null,
+    castData: null,
   };
 
   componentDidMount = () => {
@@ -35,11 +84,55 @@ class Details extends React.Component {
           // so if nothing is passed it params to this screen, then the default params will be passed ... like this
           this.setState({seriesData: json});
         });
+      fetch(
+        `https://api.themoviedb.org/3/tv/${seriesId}/season/1?api_key=628f811dd14b86f8fea17c431c364235&language=en-US`,
+      )
+        .then(response => response.json())
+        .then(json => {
+          console.log({RESPONSE: json});
+          //yeah.....antha params what doing there
+          // adding default params
+          // so if nothing is passed it params to this screen, then the default params will be passed ... like this
+          this.setState({episodeData: json});
+        });
+      fetch(
+        `https://api.themoviedb.org/3/tv/${seriesId}/aggregate_credits?api_key=628f811dd14b86f8fea17c431c364235&language=en-US`,
+      )
+        .then(response => response.json())
+        .then(json => {
+          console.log({RESPONSE: json});
+          //yeah.....antha params what doing there
+          // adding default params
+          // so if nothing is passed it params to this screen, then the default params will be passed ... like this
+          this.setState({castData: json});
+        });
     }
   };
+
+  renderEpisode = (item, index) => {
+    return <EpisodeItem epi={item} abc={false} xyz={'sjslf'} />;
+  };
+
+  renderViewMore = press => {
+    return (
+      <Text style={{color: '#fff'}} onPress={press}>
+        more
+      </Text>
+    );
+  };
+  renderViewless = press => {
+    return (
+      <Text style={{color: '#fff'}} onPress={press}>
+        less
+      </Text>
+    );
+  };
+
   render() {
     console.log(':this is from render()', this.state);
     const seriesData = this.state.seriesData;
+    const episodeData = this.state.episodeData;
+    const castData = this.state.castData;
     //const params = this.props.route?.params; // const params = this.props.route ? this.props.route.params;
     const backdrop = seriesData
       ? BACKDROP_URL + seriesData.backdrop_path
@@ -50,41 +143,89 @@ class Details extends React.Component {
     const title = seriesData ? seriesData.original_name : '-.......';
     const rating = seriesData ? seriesData.vote_average : '-...';
     const year = seriesData ? seriesData.first_air_date : '...';
+    const overview = seriesData ? seriesData.overview : '...';
+    // const episodeName = episodeData ? `${episodeData.episodes.name}` : '...';
+
+    if (seriesData == null || episodeData == null || castData == null) {
+      return (
+        <View style={{flex: 1}}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
 
     return (
       <View style={styles.container}>
-        <Image source={{uri: backdrop}} style={styles.backdrop} />
-        <View style={{flexDirection: 'row', marginTop: 5, marginLeft: 5}}>
-          <Fontisto name="netflix" size={20} color="#E50914"></Fontisto>
-          <Text
-            style={{
-              color: '#E50914',
-              marginLeft: 5,
-              fontSize: 12,
-            }}>
-            SERIES
-          </Text>
-        </View>
-        <Text
-          style={{
-            color: '#E50914',
-            marginTop: 5,
-            marginLeft: 5,
-            fontSize: 30,
-            fontWeight: 'bold',
-          }}>
-          The Witcher
-        </Text>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={{color: 'lightgreen', fontWeight: 'bold', fontSize: 14}}>
-            {rating * 10}% Match
-          </Text>
-          <Text style={{color: 'white'}}>{year}</Text>
-          {/* <Text style={{colour: 'lightgreen'}}>{rating}</Text> */}
-          <Text></Text>
-        </View>
-        <Image source={{uri: poster}} style={styles.image}></Image>
-        <Text style={styles.text}>{title}</Text>
+        <ScrollView>
+          <Image source={{uri: backdrop}} style={styles.backdrop} />
+          <View style={styles.netflixlogoview}>
+            <Fontisto name="netflix" size={20} color="#E50914"></Fontisto>
+            <Text style={styles.seriestext}>SERIES</Text>
+          </View>
+          <Text style={styles.titletext}>{title}</Text>
+          <View style={styles.ratingView}>
+            <Text style={styles.ratingText}>{rating * 10}% Match</Text>
+            <Text style={{marginLeft: 10, color: '#fff'}}>{year}</Text>
+            <Text
+              style={{
+                marginLeft: 10,
+                color: '#fff',
+                backgroundColor: '#808080',
+                paddingLeft: 3,
+                paddingRight: 3,
+                fontWeight: 'bold',
+                fontSize: 15,
+              }}>
+              18+
+            </Text>
+            <Text style={{marginLeft: 10, color: '#fff'}}>Season</Text>
+            <Text style={{marginLeft: 10, backgroundColor: '#808080'}}>HD</Text>
+          </View>
+          <View style={styles.playDownloadView}>
+            <TouchableOpacity style={styles.playButton}>
+              <View style={{flexDirection: 'row'}}>
+                <Fontisto name="play" size={17} />
+                <Text style={{fontWeight: 'bold', marginLeft: 8}}>Play</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.downloadButton}>
+              <View style={{flexDirection: 'row'}}>
+                <Feather name="download" size={17} />
+
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    color: '#fff',
+                    marginLeft: 5,
+                  }}>
+                  Download
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={{padding: 5}}>
+            <Text style={{color: 'white'}}>{overview}</Text>
+            {/* <Text style={{color:'#fff'}}>{episodeName}</Text> */}
+          </View>
+          <View style={{marginLeft: 5}}>
+            <ViewMoreText
+              numberOfLines={1}
+              renderViewMore={this.renderViewMore}
+              renderViewless={this.renderViewless}>
+              <Text style={{color: '#fff', fontSize: 12}}>Starring:</Text>
+              <Text style={{color: '#fff', fontSize: 10}}>
+                {castData.cast.map(item => item.name).join(',')}
+              </Text>
+            </ViewMoreText>
+          </View>
+          <View style={{marginLeft: 5, flexDirection: 'row'}}>
+            <Text style={{color: '#fff', fontSize: 12}}>Creater:</Text>
+            <Text style={{color: '#fff', fontSize: 10, marginTop: 2}}>
+              {seriesData.created_by.map(item => item.name)}
+            </Text>
+          </View>
+          <View>{episodeData.episodes.map(this.renderEpisode)}</View>
+        </ScrollView>
       </View>
     );
   }
@@ -95,7 +236,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#191919',
   },
   text: {
-    color: 'black',
+    color: '#fff',
   },
   image: {
     height: 300,
@@ -106,6 +247,50 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     // width: 700,
     height: 180,
+  },
+  netflixlogoview: {
+    flexDirection: 'row',
+    marginTop: 5,
+    marginLeft: 5,
+  },
+  seriestext: {
+    color: '#E50914',
+    marginLeft: 5,
+    fontSize: 12,
+  },
+  titletext: {
+    color: '#fff',
+    marginTop: 5,
+    marginLeft: 5,
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  ratingView: {
+    flexDirection: 'row',
+    padding: 10,
+  },
+  ratingText: {
+    color: 'lightgreen',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  playDownloadView: {
+    margin: 5,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  playButton: {
+    backgroundColor: 'white',
+    alignItems: 'center',
+    padding: 8,
+    borderRadius: 3,
+  },
+  downloadButton: {
+    backgroundColor: '#808080',
+    marginTop: 4,
+    alignItems: 'center',
+    padding: 8,
+    borderRadius: 3,
   },
 });
 export default Details;
