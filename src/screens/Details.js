@@ -29,26 +29,32 @@ const EpisodeItem = props => {
           source={{uri: BASE_IMAGE_URL + episode.still_path}}
           resizeMode="contain"
           style={{
-            width: 150,
-            height: 150,
+            width: 100,
+            height: 50,
             marginBottom: 5,
             marginLeft: 5,
             borderRadius: 5,
           }}
         />
-        <View style={{marginLeft: 10}}>
-          <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 15}}>
-            {episode.name}
-          </Text>
-          <Text style={{color: '#fff'}}>{episode.episode_number}</Text>
+        <View style={{marginLeft: 10, justifyContent: 'center'}}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{color: '#fff', fontWeight: 'bold'}}>
+              {episode.episode_number}
+            </Text>
+            <Text style={{color: '#fff', fontWeight: 'bold'}}>.</Text>
+
+            <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 15}}>
+              {episode.name}
+            </Text>
+          </View>
 
           <Text style={{color: '#fff'}}>{episode.air_date}</Text>
         </View>
-        <View>
+        <View style={{justifyContent: 'center'}}>
           <Feather name="download" size={30} color="#fff" />
         </View>
       </View>
-      <Text style={{color: '#fff'}}>{episode.overview}</Text>
+      <Text style={{color: '#fff', marginLeft: 5}}>{episode.overview}</Text>
     </View>
   );
 };
@@ -291,6 +297,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 8,
     borderRadius: 3,
+  },
+  marginLeft: {
+    marginLeft: 5,
   },
 });
 export default Details;
