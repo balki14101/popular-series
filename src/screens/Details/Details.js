@@ -10,6 +10,10 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
+import PickerComponent from './PickerComponent';
+import styles from './Styles';
+
+import RNPickerSelect from 'react-native-picker-select';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -24,37 +28,27 @@ const EpisodeItem = props => {
   // const number = props.episode_number
   return (
     <View style={{}}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={styles.row}>
         <Image
           source={{uri: BASE_IMAGE_URL + episode.still_path}}
           resizeMode="contain"
-          style={{
-            width: 100,
-            height: 50,
-            marginBottom: 5,
-            marginLeft: 5,
-            borderRadius: 5,
-          }}
+          style={styles.episodeImage}
         />
-        <View style={{marginLeft: 10, justifyContent: 'center'}}>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={{color: '#fff', fontWeight: 'bold'}}>
-              {episode.episode_number}
-            </Text>
-            <Text style={{color: '#fff', fontWeight: 'bold'}}>.</Text>
+        <View style={styles.episodeContentView}>
+          <View style={styles.row}>
+            <Text style={styles.whiteAndBold}>{episode.episode_number}</Text>
+            <Text style={styles.whiteAndBold}>.</Text>
 
-            <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 15}}>
-              {episode.name}
-            </Text>
+            <Text style={styles.episodeName}>{episode.name}</Text>
           </View>
 
-          <Text style={{color: '#fff'}}>{episode.air_date}</Text>
+          <Text style={styles.white}>{episode.air_date}</Text>
         </View>
         <View style={{justifyContent: 'center'}}>
           <Feather name="download" size={30} color="#fff" />
         </View>
       </View>
-      <Text style={{color: '#fff', marginLeft: 5}}>{episode.overview}</Text>
+      <Text style={styles.episodeOverview}>{episode.overview}</Text>
     </View>
   );
 };
@@ -121,14 +115,14 @@ class Details extends React.Component {
 
   renderViewMore = press => {
     return (
-      <Text style={{color: '#fff'}} onPress={press}>
+      <Text style={styles.white} onPress={press}>
         more
       </Text>
     );
   };
   renderViewless = press => {
     return (
-      <Text style={{color: '#fff'}} onPress={press}>
+      <Text style={styles.white} onPress={press}>
         less
       </Text>
     );
@@ -171,64 +165,61 @@ class Details extends React.Component {
           <Text style={styles.titletext}>{title}</Text>
           <View style={styles.ratingView}>
             <Text style={styles.ratingText}>{rating * 10}% Match</Text>
-            <Text style={{marginLeft: 10, color: '#fff'}}>{year}</Text>
-            <Text
-              style={{
-                marginLeft: 10,
-                color: '#fff',
-                backgroundColor: '#808080',
-                paddingLeft: 3,
-                paddingRight: 3,
-                fontWeight: 'bold',
-                fontSize: 15,
-              }}>
-              18+
-            </Text>
-            <Text style={{marginLeft: 10, color: '#fff'}}>Season</Text>
-            <Text style={{marginLeft: 10, backgroundColor: '#808080'}}>HD</Text>
+            <Text style={styles.year}>{year}</Text>
+            <Text style={styles.age}>18+</Text>
+            <Text style={styles.season}>Season</Text>
+            <Text style={styles.hd}>HD</Text>
           </View>
+
           <View style={styles.playDownloadView}>
             <TouchableOpacity style={styles.playButton}>
-              <View style={{flexDirection: 'row'}}>
+              <View style={styles.row}>
                 <Fontisto name="play" size={17} />
-                <Text style={{fontWeight: 'bold', marginLeft: 8}}>Play</Text>
+                <Text style={styles.play}>Play</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.downloadButton}>
-              <View style={{flexDirection: 'row'}}>
+              <View style={styles.row}>
                 <Feather name="download" size={17} />
 
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    color: '#fff',
-                    marginLeft: 5,
-                  }}>
-                  Download
-                </Text>
+                <Text style={styles.download}>Download</Text>
               </View>
             </TouchableOpacity>
           </View>
           <View style={{padding: 5}}>
-            <Text style={{color: 'white'}}>{overview}</Text>
+            <ViewMoreText
+              numberOfLines={3}
+              renderViewMore={this.renderViewMore}
+              renderViewless={this.renderViewless}>
+              <Text style={styles.white}>{overview}</Text>
+            </ViewMoreText>
             {/* <Text style={{color:'#fff'}}>{episodeName}</Text> */}
           </View>
-          <View style={{marginLeft: 5}}>
+          <View style={styles.marginLeft}>
             <ViewMoreText
               numberOfLines={1}
               renderViewMore={this.renderViewMore}
               renderViewless={this.renderViewless}>
-              <Text style={{color: '#fff', fontSize: 12}}>Starring:</Text>
-              <Text style={{color: '#fff', fontSize: 10}}>
+              <Text style={styles.cast}>Starring:</Text>
+              <Text style={styles.castContent}>
                 {castData.cast.map(item => item.name).join(',')}
               </Text>
             </ViewMoreText>
           </View>
-          <View style={{marginLeft: 5, flexDirection: 'row'}}>
-            <Text style={{color: '#fff', fontSize: 12}}>Creater:</Text>
-            <Text style={{color: '#fff', fontSize: 10, marginTop: 2}}>
+          <View style={styles.creater}>
+            <Text style={styles.cast}>Creater:</Text>
+            <Text style={styles.createrContent}>
               {seriesData.created_by.map(item => item.name)}
             </Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: '#808080',
+              width: '50%',
+              borderRadius: 5,
+              marginLeft: 5,
+            }}>
+            <PickerComponent></PickerComponent>
           </View>
           <View>{episodeData.episodes.map(this.renderEpisode)}</View>
         </ScrollView>
@@ -236,70 +227,5 @@ class Details extends React.Component {
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#191919',
-  },
-  text: {
-    color: '#fff',
-  },
-  image: {
-    height: 300,
-    width: 200,
-  },
-  backdrop: {
-    marginTop: 15,
-    alignItems: 'stretch',
-    // width: 700,
-    height: 180,
-  },
-  netflixlogoview: {
-    flexDirection: 'row',
-    marginTop: 5,
-    marginLeft: 5,
-  },
-  seriestext: {
-    color: '#E50914',
-    marginLeft: 5,
-    fontSize: 12,
-  },
-  titletext: {
-    color: '#fff',
-    marginTop: 5,
-    marginLeft: 5,
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  ratingView: {
-    flexDirection: 'row',
-    padding: 10,
-  },
-  ratingText: {
-    color: 'lightgreen',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  playDownloadView: {
-    margin: 5,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  playButton: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-    padding: 8,
-    borderRadius: 3,
-  },
-  downloadButton: {
-    backgroundColor: '#808080',
-    marginTop: 4,
-    alignItems: 'center',
-    padding: 8,
-    borderRadius: 3,
-  },
-  marginLeft: {
-    marginLeft: 5,
-  },
-});
+
 export default Details;

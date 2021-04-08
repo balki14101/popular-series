@@ -10,8 +10,8 @@ import {
   View,
 } from 'react-native';
 
-import Details from './src/screens/Details';
-import ListScreen from './src/screens/ListScreen';
+import Details from './src/screens/Details/Details';
+import ListScreen from './src/screens/List/ListScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 // vs
