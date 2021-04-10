@@ -53,6 +53,7 @@ class ListScreen extends React.Component {
   };
   gotoDetailsScreen = seriesId => {
     this.props.navigation.navigate('Detail', {seriesId});
+    // this.props.navigation.navigate('Picker', {seriesId});
   };
   renderSeriesItem = ({item}) => {
     return <SeriesItem data={item} onSeriesPress={this.gotoDetailsScreen} />;

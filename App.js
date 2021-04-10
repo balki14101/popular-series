@@ -14,6 +14,7 @@ import Details from './src/screens/Details/Details';
 import ListScreen from './src/screens/List/ListScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+
 // vs
 // import { createStackNavigator } from '@react-navigation/stack';
 // see the typo in the import here??

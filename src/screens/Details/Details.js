@@ -10,14 +10,15 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import PickerComponent from './PickerComponent';
+// import PickerComponent from './PickerComponent';
 import styles from './Styles';
 
-import RNPickerSelect from 'react-native-picker-select';
+import {Picker} from '@react-native-picker/picker';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import ViewMoreText from 'react-native-view-more-text';
+import {nativeViewProps} from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
 
 const BASE_IMAGE_URL = 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
 const BACKDROP_URL = 'https://www.themoviedb.org/t/p/original';
@@ -27,7 +28,7 @@ const EpisodeItem = props => {
   const episode = props.epi;
   // const number = props.episode_number
   return (
-    <View style={{}}>
+    <View>
       <View style={styles.row}>
         <Image
           source={{uri: BASE_IMAGE_URL + episode.still_path}}
@@ -58,6 +59,7 @@ class Details extends React.Component {
     seriesData: null,
     episodeData: null,
     castData: null,
+    name: '',
   };
 
   componentDidMount = () => {
@@ -126,6 +128,10 @@ class Details extends React.Component {
         less
       </Text>
     );
+  };
+
+  updateName = value => {
+    this.setState({name: value});
   };
 
   render() {
@@ -212,16 +218,66 @@ class Details extends React.Component {
               {seriesData.created_by.map(item => item.name)}
             </Text>
           </View>
+
+          <View style={styles.optionsView}>
+            <View style={{marginLeft: 40}}>
+              <TouchableOpacity>
+                <MaterialIcon name="add" color="white" size={30}></MaterialIcon>
+              </TouchableOpacity>
+            </View>
+            <View style={{marginLeft: 40}}>
+              <TouchableOpacity>
+                <MaterialIcon
+                  name="thumb-up"
+                  color="white"
+                  size={30}></MaterialIcon>
+              </TouchableOpacity>
+            </View>
+            <View style={{marginLeft: 40}}>
+              <TouchableOpacity>
+                <MaterialIcon
+                  name="share"
+                  color="white"
+                  size={30}></MaterialIcon>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.optionsView}>
+            <Text style={styles.optionsName}>My List</Text>
+            <Text style={styles.optionsName}>Rate</Text>
+            <Text style={styles.optionsName}>Share</Text>
+          </View>
           <View
             style={{
-              backgroundColor: '#808080',
+              backgroundColor: '#505251',
               width: '50%',
               borderRadius: 5,
-              marginLeft: 5,
+              margin: 5,
+              marginTop: 20,
             }}>
-            <PickerComponent></PickerComponent>
+            {/* <PickerComponent></PickerComponent> */}
+
+            <Picker
+              mode="dropdown"
+              style={{
+                height: 40,
+                color: '#fff',
+                fontWeight: 'bold',
+              }}
+              // itemStyle={{color: 'blue'}}
+              selectedValue={this.state.name}
+              onValueChange={this.updateName}>
+              <Picker.Item
+                label="Season"
+                value={episodeData.episodes.map(this.renderEpisode)}
+              />
+              <Picker.Item label="Sachin" value="sachin" />
+            </Picker>
           </View>
-          <View>{episodeData.episodes.map(this.renderEpisode)}</View>
+          <View>
+            <Text>{this.state.name}</Text>
+          </View>
+          {/* <View>{episodeData.episodes.map(this.renderEpisode)}</View> */}
         </ScrollView>
       </View>
     );

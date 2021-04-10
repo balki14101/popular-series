@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
 
 import {Picker} from '@react-native-picker/picker';
 
@@ -7,6 +7,7 @@ class PickerComponent extends React.Component {
   state = {
     name: '',
   };
+
   updateName = value => {
     this.setState({name: value});
   };
@@ -22,7 +23,7 @@ class PickerComponent extends React.Component {
 
           <Picker.Item label="Sachin" value="sachin" />
         </Picker>
-        <Text>{this.state.value}</Text>
+        <Text>{this.state.name}</Text>
       </View>
     );
   }

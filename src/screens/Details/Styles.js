@@ -91,6 +91,15 @@ const styles = StyleSheet.create({
   marginLeft: {
     marginLeft: 5,
   },
+  optionsView: {
+    marginTop: 10,
+    flexDirection: 'row',
+  },
+  optionsName: {
+    marginLeft: 40,
+    fontSize: 10,
+    color: 'white',
+  },
   episodeImage: {
     width: 100,
     height: 50,
