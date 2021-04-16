@@ -27,12 +27,13 @@ const EpisodeItem = props => {
   console.log(props);
   const episode = props.epi;
   // const number = props.episode_number
+
   return (
-    <View>
+    <View style={{padding: 16}}>
       <View style={styles.row}>
         <Image
           source={{uri: BASE_IMAGE_URL + episode.still_path}}
-          resizeMode="contain"
+          resizeMode="cover"
           style={styles.episodeImage}
         />
         <View style={styles.episodeContentView}>
@@ -49,23 +50,32 @@ const EpisodeItem = props => {
           <Feather name="download" size={30} color="#fff" />
         </View>
       </View>
-      <Text style={styles.episodeOverview}>{episode.overview}</Text>
+      <View style={{}}>
+        <Text numberOfLines={2} style={styles.episodeOverview}>
+          {episode.overview}
+        </Text>
+      </View>
     </View>
   );
 };
 
 class Details extends React.Component {
-  state = {
-    seriesData: null,
-    episodeData: null,
-    castData: null,
-    name: '',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      seriesData: null,
+      episodeData: null,
+      castData: null,
+      name: '',
+      selectedSeasonNumber: null,
+    };
+
+    this.seriesId = props.route?.params?.seriesId;
+  }
 
   componentDidMount = () => {
     // make API calls, other tasks, etc
     console.log('this is from did mount');
-    const params = this.props.route?.params;
     // params can be null here
     // And it is null here, because it is the first screen and the params are not passed from any other screens
 
@@ -73,32 +83,23 @@ class Details extends React.Component {
     // console.log({params});
 
     // Error is because, in the below line it is
-    if (params != null) {
-      const seriesId = params.seriesId;
+    if (this.seriesId != null) {
       fetch(
-        `https://api.themoviedb.org/3/tv/${seriesId}?api_key=628f811dd14b86f8fea17c431c364235&language=en-US`,
+        `https://api.themoviedb.org/3/tv/${this.seriesId}?api_key=628f811dd14b86f8fea17c431c364235&language=en-US`,
       )
         .then(response => response.json())
         .then(json => {
+          this.updateSelectedSeason(json.seasons[0].season_number);
+
           console.log({RESPONSE: json});
           //yeah.....antha params what doing there
           // adding default params
           // so if nothing is passed it params to this screen, then the default params will be passed ... like this
           this.setState({seriesData: json});
         });
+
       fetch(
-        `https://api.themoviedb.org/3/tv/${seriesId}/season/1?api_key=628f811dd14b86f8fea17c431c364235&language=en-US`,
-      )
-        .then(response => response.json())
-        .then(json => {
-          console.log({RESPONSE: json});
-          //yeah.....antha params what doing there
-          // adding default params
-          // so if nothing is passed it params to this screen, then the default params will be passed ... like this
-          this.setState({episodeData: json});
-        });
-      fetch(
-        `https://api.themoviedb.org/3/tv/${seriesId}/aggregate_credits?api_key=628f811dd14b86f8fea17c431c364235&language=en-US`,
+        `https://api.themoviedb.org/3/tv/${this.seriesId}/aggregate_credits?api_key=628f811dd14b86f8fea17c431c364235&language=en-US`,
       )
         .then(response => response.json())
         .then(json => {
@@ -130,8 +131,19 @@ class Details extends React.Component {
     );
   };
 
-  updateName = value => {
-    this.setState({name: value});
+  updateSelectedSeason = value => {
+    this.setState({selectedSeasonNumber: value});
+    fetch(
+      `https://api.themoviedb.org/3/tv/${this.seriesId}/season/${value}?api_key=628f811dd14b86f8fea17c431c364235&language=en-US`,
+    )
+      .then(response => response.json())
+      .then(json => {
+        console.log({RESPONSE: json});
+        //yeah.....antha params what doing there
+        // adding default params
+        // so if nothing is passed it params to this screen, then the default params will be passed ... like this
+        this.setState({episodeData: json});
+      });
   };
 
   render() {
@@ -265,19 +277,20 @@ class Details extends React.Component {
                 fontWeight: 'bold',
               }}
               // itemStyle={{color: 'blue'}}
-              selectedValue={this.state.name}
-              onValueChange={this.updateName}>
-              <Picker.Item
-                label="Season"
-                value={episodeData.episodes.map(this.renderEpisode)}
-              />
-              <Picker.Item label="Sachin" value="sachin" />
+              selectedValue={this.state.selectedSeasonNumber}
+              onValueChange={this.updateSelectedSeason}>
+              {this.state.seriesData.seasons.map(season => {
+                return (
+                  <Picker.Item
+                    label={season.name}
+                    value={season.season_number}
+                  />
+                );
+              })}
             </Picker>
           </View>
-          <View>
-            <Text>{this.state.name}</Text>
-          </View>
-          {/* <View>{episodeData.episodes.map(this.renderEpisode)}</View> */}
+
+          <View>{episodeData.episodes.map(this.renderEpisode)}</View>
         </ScrollView>
       </View>
     );
