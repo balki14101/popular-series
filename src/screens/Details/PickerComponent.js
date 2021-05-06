@@ -30,7 +30,7 @@
 // }
 
 // const styles = StyleSheet.create({
-//   text: {
+//   color: {
 //     backgroundColor: '#fff',
 //   },
 // });
