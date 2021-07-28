@@ -26,14 +26,13 @@ const BACKDROP_URL = 'https://www.themoviedb.org/t/p/original';
 const EpisodeItem = props => {
   console.log(props);
   const episode = props.epi;
-  // const number = props.episode_number
 
   return (
     <View style={{padding: 16}}>
       <View style={styles.row}>
         <Image
           source={{uri: BASE_IMAGE_URL + episode.still_path}}
-          resizeMode="cover"
+          resizeMode="center"
           style={styles.episodeImage}
         />
         <View style={styles.episodeContentView}>
@@ -74,15 +73,12 @@ class Details extends React.Component {
   }
 
   componentDidMount = () => {
-    // make API calls, other tasks, etc
     console.log('this is from did mount');
     // params can be null here
     // And it is null here, because it is the first screen and the params are not passed from any other screens
 
     // So have to put a null check here
-    // console.log({params});
 
-    // Error is because, in the below line it is
     if (this.seriesId != null) {
       fetch(
         `https://api.themoviedb.org/3/tv/${this.seriesId}?api_key=628f811dd14b86f8fea17c431c364235&language=en-US`,
@@ -92,9 +88,7 @@ class Details extends React.Component {
           this.updateSelectedSeason(json.seasons[0].season_number);
 
           console.log({RESPONSE: json});
-          //yeah.....antha params what doing there
-          // adding default params
-          // so if nothing is passed it params to this screen, then the default params will be passed ... like this
+         
           this.setState({seriesData: json});
         });
 
@@ -104,9 +98,7 @@ class Details extends React.Component {
         .then(response => response.json())
         .then(json => {
           console.log({RESPONSE: json});
-          //yeah.....antha params what doing there
-          // adding default params
-          // so if nothing is passed it params to this screen, then the default params will be passed ... like this
+          
           this.setState({castData: json});
         });
     }
@@ -139,9 +131,7 @@ class Details extends React.Component {
       .then(response => response.json())
       .then(json => {
         console.log({RESPONSE: json});
-        //yeah.....antha params what doing there
-        // adding default params
-        // so if nothing is passed it params to this screen, then the default params will be passed ... like this
+       
         this.setState({episodeData: json});
       });
   };
@@ -262,10 +252,12 @@ class Details extends React.Component {
           <View
             style={{
               backgroundColor: '#505251',
-              width: '50%',
+              width: '45%',
               borderRadius: 5,
               margin: 5,
               marginTop: 20,
+              justifyContent: 'center',
+              // alignItems:'center'
             }}>
             {/* <PickerComponent></PickerComponent> */}
 

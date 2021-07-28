@@ -15,13 +15,7 @@ import ListScreen from './src/screens/List/ListScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-// vs
-// import { createStackNavigator } from '@react-navigation/stack';
-// see the typo in the import here??
-// See, now we got that folder inside node_modules
-// node_modules/@react-navigation/stack
-// minor change
-// one more change
+
 const Stack = createStackNavigator();
 
 const App = () => {

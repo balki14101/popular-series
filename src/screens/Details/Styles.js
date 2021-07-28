@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     width: 200,
   },
   backdrop: {
-    marginTop: 15,
+    // marginTop: 15,
     alignItems: 'stretch',
     // width: 700,
     height: 180,
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   episodeContentView: {
-    backgroundColor: 'red',
+    // backgroundColor: '',
     flex: 1,
     marginLeft: 1,
     flexDirection: 'column',

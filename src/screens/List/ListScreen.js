@@ -27,7 +27,7 @@ const SeriesItem = ({data, onSeriesPress}) => {
       <View>
         <Text style={styles.title}>{data.name} </Text>
         <View style={{flexDirection: 'row', marginLeft: 5}}>
-          <MaterialIcons name="star" size={14} color="white" />
+          <MaterialIcons name="star" size={14} color="gold" />
           <Text style={styles.rating}>{data.vote_average}</Text>
         </View>
         <Text></Text>
