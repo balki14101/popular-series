@@ -1,8 +1,8 @@
 # Netflix-Clone
 
-Netflix-Clone App is a simple version of cloning which contains 2 screens[Top 20 TvShows List Screen and Its details Screen].
-It uses APIs from [TMDB](https://developers.themoviedb.org/3/getting-started/introduction) - The Movie Database.
-This is my first step of cloning a real-world application.
+Netflix-Clone App is a simple version of cloning which contains 2 screens[Top 20 TvShows List Screen and Its details Screen].<br />
+It uses APIs from [TMDB](https://developers.themoviedb.org/3/getting-started/introduction) - The Movie Database.<br />
+This is my first step of cloning a real-world application.<br />
 
 ## Preview
 <img src="https://github.com/balki14101/netflix-clone/blob/master/1.jpg" width=300 >
