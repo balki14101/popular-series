@@ -13,7 +13,7 @@ This is my first step of cloning a real-world application.<br />
 <img src="https://github.com/balki14101/netflix-clone/blob/master/6.jpg" width=300 >
 
 ## Download APK
-Download and try this APK from [here](https://i.diawi.com/Qpz9LP)
+Download and try this APK from [here](https://i.diawi.com/2Q4gmv)
 
 ## To Run in VSCode
 Follow the commands below
